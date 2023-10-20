@@ -2,10 +2,13 @@
 
 if(!file.exists("./data")){dir.create("./data")}
 
+# link given in the course
 fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 
+# Downlading the file
 download.file(fileUrl,destfile="./data/Dataset.zip",method="curl")
 
+# Unzipping the file because the file was zipped 
 unzip(zipfile="./data/Dataset.zip",exdir="./data")
 
 path_rf <- file.path("./data" , "UCI HAR Dataset")
@@ -16,6 +19,8 @@ files
 library(plyr)
 
 ## Reading the data as there are different tables provided in the dataset. 
+
+# Renaming as it is difficult to distinguish. 
 
 activitytest  <- read.table(file.path(path_rf, "test" , "Y_test.txt" ),header = FALSE)
 
@@ -35,10 +40,14 @@ featuresname <- read.table(file.path(path_rf, "features.txt"),head = FALSE)
 
 ## Combing the data 1 
 
+# Subject data has combined the previously named subjecttrain data and subjecttest data
+
 subjectdata <- rbind(subjecttrain, subjecttest)
 
+# Activity data has combined the previously named activitytrain data and activitytest data
 activitydata <- rbind(activitytrain, activitytest)
 
+# Features data has combined the previously named featurestrain data and featurestest data
 featuresdata <- rbind(featurestrain, featurestest)
 
 ## Combining previously merged data
@@ -51,8 +60,11 @@ names(featuresdata)<- featuresname$V2
 
 ## Final Merged file
 
+# Combinding subjectdata and activity data together
+
 merged <- cbind(subjectdata, activitydata)
 
+# Combinding subjectdata, and activity data that are previously merged with features data. So all three datas are combined. 
 finaldata1 <- cbind(featuresdata, merged)
 
 ## Renaming
@@ -70,6 +82,8 @@ names(finaldata1)<-gsub("Mag", "MAGNITUDE", names(finaldata1))
 names(finaldata1)<-gsub("BodyBody", "BODY", names(finaldata1))
 
 ## Creating subsample
+
+# This subsample includes mean and standard deviation only
 
 subsample1 <-featuresname$V2[grep("mean\\(\\)|std\\(\\)", featuresname$V2)]
 
