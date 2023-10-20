@@ -39,11 +39,6 @@ names(featuresdata)<- featuresname$V2
 merged <- cbind(subjectdata, activitydata)
 finaldata1 <- cbind(featuresdata, merged)
 
-subsample1 <-featuresname$V2[grep("mean\\(\\)|std\\(\\)", featuresname$V2)]
-
-selected <- c(as.character(subsample1), "subject", "activity" )
-completedata <- subset(finaldata1,select=selected)
-
 ## Renaming
 
 names(finaldata1)<-gsub("^t", "TIME", names(finaldata1))
@@ -52,6 +47,14 @@ names(finaldata1)<-gsub("Acc", "ACCERLORMETER", names(finaldata1))
 names(finaldata1)<-gsub("Gyro", "GYROSCOPE", names(finaldata1))
 names(finaldata1)<-gsub("Mag", "MAGNITUDE", names(finaldata1))
 names(finaldata1)<-gsub("BodyBody", "BODY", names(finaldata1))
+
+## Creating subsample
+
+subsample1 <-featuresname$V2[grep("mean\\(\\)|std\\(\\)", featuresname$V2)]
+
+selected <- c(as.character(subsample1), "subject", "activity" )
+completedata <- subset(finaldata1,select=selected)
+
 
 ## Final File
 
